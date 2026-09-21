@@ -1,1 +1,3 @@
 com\lecomptoir\Main.class
+com\lecomptoir\services\enums\Category.class
+com\lecomptoir\services\Product.class
