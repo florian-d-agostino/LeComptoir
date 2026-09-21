@@ -5,6 +5,7 @@ package com.lecomptoir.services;
 
 import java.math.BigDecimal;
 
+import com.lecomptoir.services.discount.DrinkDiscount;
 import com.lecomptoir.services.discount.FiftyPercent;
 
 
@@ -30,23 +31,35 @@ public class Checkout {
 
 
         BigDecimal gtotal = cart.getTotal();
-        FiftyPercent discounted = new FiftyPercent();
-        BigDecimal discount = discounted.calculate(cart);
-
         BigDecimal finalTotal = gtotal;
 
+        // 1. Drinks Discount (Request 3, tag v3)
+        DrinkDiscount drinkDisc = new DrinkDiscount();
+        BigDecimal drinkDiscountAmount = drinkDisc.drinkDiscount(cart);
+        boolean hasDrinkDiscount = drinkDiscountAmount.compareTo(BigDecimal.ZERO) < 0;
 
+        // 2. 10% Discount if total > 50€ (Request 2, tag v2)
+        FiftyPercent discounted = new FiftyPercent();
+        BigDecimal fiftyDiscount = discounted.calculate(cart);
+        boolean hasFiftyDiscount = fiftyDiscount.compareTo(BigDecimal.ZERO) > 0;
 
-
-        if (discount.compareTo(BigDecimal.ZERO) > 0) {
-            finalTotal = gtotal.subtract(discount);
-
+        // Display discounts if at least one applies
+        if (hasDrinkDiscount || hasFiftyDiscount) {
             receipt += "TOTAL AVANT REMISE    : " + gtotal + " EUR \n\n";
-            receipt += "REMISE DE 10% APPLICQUÉE: " + discount + " EUR \n\n";
+
+            if (hasDrinkDiscount) {
+                finalTotal = finalTotal.add(drinkDiscountAmount);
+                receipt += "OFFRE BOISSONS (3 POUR 2): " + drinkDiscountAmount + " EUR \n\n";
+            }
+
+            if (hasFiftyDiscount) {
+                finalTotal = finalTotal.subtract(fiftyDiscount);
+                receipt += "REMISE DE 10% APPLIQUÉE: -" + fiftyDiscount + " EUR \n\n";
+            }
+
             receipt += "-------------------------\n\n";
-            receipt += "TOTAL NET A PAYER     : "+ finalTotal + " EUR \n";
-        }
-        else {
+            receipt += "TOTAL NET A PAYER     : " + finalTotal + " EUR \n";
+        } else {
             receipt += "TOTAL A PAYER         : " + gtotal + " EUR \n";
         }
 
