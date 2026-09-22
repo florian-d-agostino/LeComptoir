@@ -3,10 +3,14 @@ import com.lecomptoir.services.Cart;
 import com.lecomptoir.services.CartLine;
 import com.lecomptoir.services.Catalog;
 import com.lecomptoir.services.Checkout;
+import com.lecomptoir.services.discount.LoyaltyCard;
 public class Main {
 
 
     public static void main(String[] args) {
+
+
+        LoyaltyCard card = new LoyaltyCard(150);
 
 
 
@@ -19,7 +23,7 @@ public class Main {
 
 
         Checkout checkout = new Checkout();
-        String receipt = checkout.generateReceipt(cart);
+        String receipt = checkout.generateReceipt(cart, card);
         System.out.println(receipt);
     }
 }
