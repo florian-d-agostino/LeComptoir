@@ -13,7 +13,7 @@ public class Catalog {
     public static final Product STEAK    = new Product("P3", "Steak Haché", new BigDecimal("4.80"), Category.MEAT);
     public static final Product ICE_TEA  = new Product("P4", "Ice Tea Pêche", new BigDecimal("2.00"), Category.DRINK);
     public static final Product WATER    = new Product("P5", "Eau Minérale 1L", new BigDecimal("1.00"), Category.DRINK);
-    public static final Product BROOM    = new Product("P6", "Balais ", new BigDecimal("47.00"), Category.OTHER);
+    public static final Product BROOM    = new Product("P6", "Balais ", new BigDecimal("17.00"), Category.OTHER);
 
     public static List<Product> getAll() {
         return List.of(BAGUETTE, COCA, STEAK, ICE_TEA, WATER);

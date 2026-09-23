@@ -1,0 +1,12 @@
+com\lecomptoir\services\discount\FiftyPercent.class
+com\lecomptoir\services\discount\TvaCalculator$TvaData.class
+com\lecomptoir\services\Cart.class
+com\lecomptoir\services\discount\DrinkDiscount.class
+com\lecomptoir\services\Checkout.class
+com\lecomptoir\services\discount\LoyaltyCard.class
+com\lecomptoir\services\discount\TvaCalculator.class
+com\lecomptoir\services\Catalog.class
+com\lecomptoir\Main.class
+com\lecomptoir\services\CartLine.class
+com\lecomptoir\services\enums\Category.class
+com\lecomptoir\services\Product.class

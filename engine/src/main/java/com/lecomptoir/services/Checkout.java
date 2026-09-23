@@ -71,18 +71,12 @@ public class Checkout {
             receipt += discountLabel + ": -" + bestDiscount + " EUR \n\n";
             receipt += "-------------------------\n\n";
 
-            receipt += "TOTAL NET A PAYER     : " + finalTotal + " EUR \n";
+            receipt += "TOTAL NET A PAYER     : " + finalTotal + " EUR \n\n";
         } else {
-            receipt += "TOTAL A PAYER         : " + gtotal + " EUR \n";
+            receipt += "TOTAL A PAYER         : " + gtotal + " EUR \n\n";
         }
 
 
-        // Update card
-        if (card != null) {
-            boolean usedLoyalty = discountLabel.equals("REMISE FIDELITE");
-            card.usedPoints(usedLoyalty, finalTotal);
-            receipt += "POINTS FIDELITE        :" + card.getPoints() + " pts \n\n";
-        }
 
 
         // TVA (tag v4)
@@ -94,6 +88,16 @@ public class Checkout {
         receipt += "TVA 5,5%              : " + tva.tvaFood() + " EUR \n";
         receipt += "TVA 20%               : " + tva.tvaOther() + " EUR \n";
         receipt += "TOTAL TTC             : " + tva.totalTtc() + " EUR \n";
+
+        receipt += "=========================\n";
+
+
+        // Update card
+        if (card != null) {
+            boolean usedLoyalty = discountLabel.equals("REMISE FIDELITE");
+            card.usedPoints(usedLoyalty, finalTotal);
+            receipt += "POINTS FIDELITE RESTANT       :" + card.getPoints() + " pts \n";
+        }
 
         receipt += "=========================\n";
 
