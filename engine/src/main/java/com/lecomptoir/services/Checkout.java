@@ -1,6 +1,7 @@
 package com.lecomptoir.services;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import com.lecomptoir.services.discount.DrinkDiscount;
 import com.lecomptoir.services.discount.FiftyPercent;
@@ -84,10 +85,11 @@ public class Checkout {
         TvaData tva = tvaCalc.tvaCalculator(cart);
 
         receipt += "-------------------------\n";
-        receipt += "TOTAL HORS TAXES      : " + tva.totalHT() + " EUR \n";
-        receipt += "TVA 5,5%              : " + tva.tvaFood() + " EUR \n";
-        receipt += "TVA 20%               : " + tva.tvaOther() + " EUR \n";
-        receipt += "TOTAL TTC             : " + tva.totalTtc() + " EUR \n";
+        receipt += "TOTAL HORS TAXES      : " + tva.totalHT().setScale(2, RoundingMode.HALF_UP) + " EUR \n";
+        receipt += "TVA 5,5%              : " + tva.tvaFood().setScale(2, RoundingMode.HALF_UP) + " EUR \n";
+        receipt += "TVA 20%               : " + tva.tvaOther().setScale(2, RoundingMode.HALF_UP) + " EUR \n";
+        receipt += "-------------------------\n";
+        receipt += "TOTAL TTC             : " + tva.totalTtc().setScale(2, RoundingMode.HALF_UP) + " EUR \n";
 
         receipt += "=========================\n";
 
@@ -96,7 +98,7 @@ public class Checkout {
         if (card != null) {
             boolean usedLoyalty = discountLabel.equals("REMISE FIDELITE");
             card.usedPoints(usedLoyalty, finalTotal);
-            receipt += "POINTS FIDELITE RESTANT       :" + card.getPoints() + " pts \n";
+            receipt += "POINTS FIDELITE RESTANT       : " + card.getPoints() + " pts \n";
         }
 
         receipt += "=========================\n";
