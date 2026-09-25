@@ -1,12 +1,10 @@
 package com.lecomptoir.services.discount;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.lecomptoir.services.Cart;
 import com.lecomptoir.services.CartLine;
-import com.lecomptoir.services.Product;
 import com.lecomptoir.services.enums.Category;
 
 /**
@@ -21,7 +19,8 @@ public class DrinkDiscount {
                 .sorted((l1, l2) -> l1.product().unitPrice().compareTo(l2.product().unitPrice()))
                 .toList();
 
-        // Calculate total number of drinks and number of free drinks (1 free for every 3 drinks)
+        // Calculate total number of drinks and number of free drinks (1 free for every
+        // 3 drinks)
         int totalDrinks = drinkLines.stream().mapToInt(CartLine::quantity).sum();
         int freeDrinksCount = totalDrinks / 3;
 
