@@ -15,40 +15,36 @@ import com.lecomptoir.services.enums.Category;
 public class DrinkDiscount {
 
     public BigDecimal drinkDiscount(Cart cart) {
+        // Filter drink items and sort them by unit price in ascending order
+        List<CartLine> drinkLines = cart.getAllLines().stream()
+                .filter(line -> line.product().category() == Category.DRINK)
+                .sorted((l1, l2) -> l1.product().unitPrice().compareTo(l2.product().unitPrice()))
+                .toList();
 
-        List<CartLine> lines = new ArrayList<>();
-        List<BigDecimal> list = new ArrayList<>();
-        Product product;
+        // Calculate total number of drinks and number of free drinks (1 free for every 3 drinks)
+        int totalDrinks = drinkLines.stream().mapToInt(CartLine::quantity).sum();
+        int freeDrinksCount = totalDrinks / 3;
 
-        lines = cart.getAllLines();
+        if (freeDrinksCount == 0) {
+            return BigDecimal.ZERO;
+        }
 
-        // Get all DRINK products in list
-        for (CartLine cartLine : lines) {
-            product = cartLine.product();
+        BigDecimal totalDiscount = BigDecimal.ZERO;
 
-            if (product.category() == Category.DRINK) {
-                for (int i = cartLine.quantity(); i > 0; i--) {
-                    list.add(product.unitPrice());
-                }
+        // Apply discount starting from the cheapest drinks
+        for (CartLine line : drinkLines) {
+            if (freeDrinksCount <= 0) {
+                break;
             }
+
+            // Determine how many free drinks can be consumed from this line
+            int taken = Math.min(line.quantity(), freeDrinksCount);
+            BigDecimal discountForLine = line.product().unitPrice().multiply(BigDecimal.valueOf(taken));
+            totalDiscount = totalDiscount.add(discountForLine);
+            freeDrinksCount -= taken;
         }
 
-        int discountNumber = list.size() / 3; // Init how much discount / 3 products
-
-        // Check if more than 3 products
-        if (list.size() >= 3) { // More than 3
-            list.sort(null); // Sort list
-
-            BigDecimal totalDiscount = BigDecimal.ZERO;
-
-            for (int i = 0; i < discountNumber; i++) { // for discountNumber times
-                totalDiscount = totalDiscount.add(list.get(i).negate()); // Add negative unitPrice to total discount
-            }
-            return totalDiscount;
-        }
-
-        else {
-            return BigDecimal.ZERO; // return 0 if less than 3 products
-        }
+        // Return the discount as a negative amount
+        return totalDiscount.negate();
     }
 }

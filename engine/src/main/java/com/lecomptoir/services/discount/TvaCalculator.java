@@ -30,20 +30,16 @@ public class TvaCalculator {
 
         for (CartLine cartLine : lines) {
             product = cartLine.product();
+            BigDecimal quantity = BigDecimal.valueOf(cartLine.quantity());
+            BigDecimal lineTotalHT = product.unitPrice().multiply(quantity);
 
-            for (int i = cartLine.quantity(); i > 0; i--) {
-
-                if (product.category() == Category.OTHER) {
-
-                    tvaOther = tvaOther.add(product.unitPrice().multiply(BigDecimal.valueOf(0.20)));
-
-                } else {
-
-                    tvaFood = tvaFood.add(product.unitPrice().multiply(BigDecimal.valueOf(0.055)));
-                }
-
-                totalHT = totalHT.add(product.unitPrice());
+            if (product.category() == Category.OTHER) {
+                tvaOther = tvaOther.add(lineTotalHT.multiply(BigDecimal.valueOf(0.20)));
+            } else {
+                tvaFood = tvaFood.add(lineTotalHT.multiply(BigDecimal.valueOf(0.055)));
             }
+
+            totalHT = totalHT.add(lineTotalHT);
         }
 
         totalTtc = totalTtc.add(tvaFood).add(tvaOther).add(totalHT);
