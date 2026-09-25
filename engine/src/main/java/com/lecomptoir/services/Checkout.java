@@ -1,13 +1,18 @@
 package com.lecomptoir.services;
 
+
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import com.lecomptoir.services.discount.DrinkDiscount;
-import com.lecomptoir.services.discount.FiftyPercent;
+import com.lecomptoir.services.discount.DiscountStrategy;
+import com.lecomptoir.services.discount.DiscountStrategy.BestDiscountResult;
 import com.lecomptoir.services.discount.LoyaltyCard;
 import com.lecomptoir.services.discount.TvaCalculator;
 import com.lecomptoir.services.discount.TvaCalculator.TvaData;
+
+
+
 
 public class Checkout {
     public String generateReceipt(Cart cart, LoyaltyCard card) {
@@ -16,6 +21,8 @@ public class Checkout {
         for (CartLine line : cart.getAllLines()) {
 
             BigDecimal lineTotal = line.product().unitPrice().multiply(BigDecimal.valueOf(line.quantity()));
+
+
 
             // Quantity
             receipt += "- " + line.product().label() + " x" + line.quantity() + " : " + lineTotal + " EUR \n\n";
@@ -29,39 +36,12 @@ public class Checkout {
 
 
 
-
-
-        // Drinks Discount (tag v3)
-        DrinkDiscount drinkDisc = new DrinkDiscount();
-        BigDecimal drinkDiscountAmount = drinkDisc.drinkDiscount(cart).abs();
-
-
-
-
-
-        // 10% if > 50 EUR (tag v2)
-        FiftyPercent discounted = new FiftyPercent();
-        BigDecimal fiftyDiscount = discounted.calculate(cart);
-
-
-
-        // Loyalty Discount (tag v5)
-        BigDecimal loyaltyDiscount = (card != null) ? card.calculateDiscount() : BigDecimal.ZERO;
-
-
         // Best Discount
-        BigDecimal bestDiscount = drinkDiscountAmount;
-        String discountLabel = "OFFRE BOISSONS (3 POUR 2)";
+        BestDiscountResult best = DiscountStrategy.findBestDiscount(cart, card);
+        BigDecimal bestDiscount = best.amount();
+        String discountLabel = best.label();
 
-        if (fiftyDiscount.compareTo(bestDiscount) > 0) {
-            bestDiscount = fiftyDiscount;
-            discountLabel = "REMISE DE 10% APPLIQUÉE";
-        }
 
-        if (loyaltyDiscount.compareTo(bestDiscount) > 0) {
-            bestDiscount = loyaltyDiscount;
-            discountLabel = "REMISE FIDELITE";
-        }
 
         // Display discounts
         if (bestDiscount.compareTo(BigDecimal.ZERO) > 0) {
@@ -76,7 +56,6 @@ public class Checkout {
         } else {
             receipt += "TOTAL A PAYER         : " + gtotal + " EUR \n\n";
         }
-
 
 
 

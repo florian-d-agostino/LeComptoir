@@ -16,6 +16,6 @@ public class Catalog {
     public static final Product BROOM    = new Product("P6", "Balais ", new BigDecimal("17.00"), Category.OTHER);
 
     public static List<Product> getAll() {
-        return List.of(BAGUETTE, COCA, STEAK, ICE_TEA, WATER);
+        return List.of(BAGUETTE, COCA, STEAK, ICE_TEA, WATER, BROOM);
     }
 }

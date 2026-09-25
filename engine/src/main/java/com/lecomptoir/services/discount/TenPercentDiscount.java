@@ -5,10 +5,9 @@ import java.math.RoundingMode;
 
 import com.lecomptoir.services.Cart;
 
-public class FiftyPercent {
+public class TenPercentDiscount {
     private static final BigDecimal FIFTY = new BigDecimal("50.00");
     private static final BigDecimal RATE = new BigDecimal("0.10");
-
 
     public BigDecimal calculate(Cart cart) {
         BigDecimal total = cart.getTotal();
@@ -18,8 +17,4 @@ public class FiftyPercent {
         }
         return BigDecimal.ZERO;
     }
-    
-    
-    
-
 }
