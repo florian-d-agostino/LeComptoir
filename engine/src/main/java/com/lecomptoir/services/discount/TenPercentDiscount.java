@@ -8,13 +8,13 @@ import com.lecomptoir.services.Cart;
 public class TenPercentDiscount {
     private static final BigDecimal FIFTY = new BigDecimal("50.00");
     private static final BigDecimal RATE_FIFTY = new BigDecimal("0.10");
-    private static final BigDecimal SEVENTY = new BigDecimal("70.00");
+    private static final BigDecimal SEVENTY_FIVE = new BigDecimal("75.00");
     private static final BigDecimal RATE_SEVENTY = new BigDecimal("0.15");
 
     public BigDecimal calculate(Cart cart) {
         BigDecimal total = cart.getTotal();
 
-        if (total.compareTo(SEVENTY) > 0) {
+        if (total.compareTo(SEVENTY_FIVE) > 0) {
             return total.multiply(RATE_SEVENTY).setScale(2, RoundingMode.HALF_UP);
         }
         if (total.compareTo(FIFTY) > 0) {

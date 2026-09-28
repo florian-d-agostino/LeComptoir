@@ -33,7 +33,11 @@ public class DiscountStrategy {
 
         if (fiftyDiscount.compareTo(bestDiscount) > 0) {
             bestDiscount = fiftyDiscount;
-            discountLabel = "REMISE DE 10% APPLIQUÉE";
+            if (cart.getTotal().compareTo(new BigDecimal("75.00")) >= 0) {
+                discountLabel = "REMISE DE 15% APPLIQUÉE";
+            } else {
+                discountLabel = "REMISE DE 10% APPLIQUÉE";
+            }
         }
 
         if (loyaltyDiscount.compareTo(bestDiscount) > 0) {
