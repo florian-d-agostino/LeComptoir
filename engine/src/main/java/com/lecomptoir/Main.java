@@ -1,5 +1,10 @@
 package com.lecomptoir;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
+
 import com.lecomptoir.services.Cart;
 import com.lecomptoir.services.CartLine;
 import com.lecomptoir.services.Catalog;
@@ -8,11 +13,6 @@ import com.lecomptoir.services.discount.LoyaltyCard;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.nio.charset.StandardCharsets;
-
 public class Main {
 
     public static String runCheckoutDemo() {
@@ -20,7 +20,7 @@ public class Main {
 
         Cart cart = new Cart();
         cart.addLine(new CartLine(Catalog.BAGUETTE, 2));
-        cart.addLine(new CartLine(Catalog.COCA, 3));
+        cart.addLine(new CartLine(Catalog.COCA, 12));
         cart.addLine(new CartLine(Catalog.STEAK, 1));
         cart.addLine(new CartLine(Catalog.BROOM, 1));
 
@@ -53,4 +53,4 @@ public class Main {
         server.start();
         System.out.println("Serveur Java démarré sur http://localhost:" + port + "/receipt");
     }
-}
+}
